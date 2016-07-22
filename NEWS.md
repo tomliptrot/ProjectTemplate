@@ -1,4 +1,26 @@
-v0.5-2.1 (2014-10-05)
+# ProjectTemplate 0.6-2 (2016-07-22)
+
+* The `port` option is now used for `RPostgreSQL` connections.
+* Update to getting-started/mastering documentation (#142, @matt-jay).
+* Fix typo in error msg (#141, @famuvie).
+* Use `inherits = FALSE` in `get()` calls within specific environments (#139, @famuvie)
+* Isolate tests by using temporary directories and properly undoing `setwd()` calls (#132).
+
+
+v0.6-1 (2014-11-28)
+===
+
+* `create.project()` creates `README.md` files are created in each subdirectory (#128).
+* README file in main directory is now also formatted as Markdown, with the project name as title.
+* Code that creates and runs tests now also allows non-R files in `libs` and `tests` subdirectories.
+* libraries from the `libraries` section are loaded before sourcing `lib/` files (#130).
+
+v0.6 (2014-10-05)
+===
+
+* Includes all modifications from v0.5-3 and v0.5-2.
+
+v0.5-3 (2014-10-05)
 ===
 
 * Packages required for loading data sources are attached to the search path (with a warning) only if the new compatibility setting `attach_internal_libraries` is set to `TRUE`.  Attaching packages to the search path seems to be unnecessary to achieve proper functionality, but users might rely on this behavior, and so this is the default for migrated projects but turned off for new projects (#104).
