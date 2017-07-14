@@ -385,3 +385,47 @@ sql.reader <- function(data.file, filename, variable.name)
                   database.info[['dbname']]))
   }
 }
+
+
+sql_query <- function(query, credentials_file = '~/.redshift.dcf', dbname = NULL, convert_type = TRUE)
+{
+  library(ProjectTemplate)
+  database.info <- translate.dcf(credentials_file)
+  
+  if(is.null(  database.info [['dbname']])) database.info [['dbname']] = dbname
+  
+  require('RPostgreSQL')
+  
+  pgsql.driver <- DBI::dbDriver("PostgreSQL")
+  
+  # Default value for 'port' for Postgres is 5432.
+  if (is.null(database.info[['port']]))
+  {
+    database.info[['port']] <- 5432
+  }
+  
+  connection <- DBI::dbConnect(pgsql.driver,
+                               user = database.info[['user']],
+                               password = database.info[['password']],
+                               host = database.info[['host']],
+                               dbname = database.info[['dbname']],
+                               port = as.integer(database.info[['port']]))
+  
+  
+  data.parcel <- try(DBI::dbGetQuery(connection, query))
+  if(convert_type){
+    
+    data.parcel = readr::type_convert(data.parcel)
+  }
+  
+  # Disconnect from database resources. Warn if failure.
+  disconnect.success <- DBI::dbDisconnect(connection)
+  
+  if (! disconnect.success)
+  {
+    warning(paste('Unable to disconnect from database:',
+                  database.info[['dbname']]))
+  }
+  
+  return(data.parcel)
+}
